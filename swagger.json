@@ -1,468 +1,468 @@
 {
-    "openapi": "3.0.0",
-    "info": {
-        "description": "Find the best restro near you.",
-        "version": "1.0.0",
-        "title": "Restro Finder",
-        "contact": {
-            "email": "obinnaeye@gmail.com"
-        },
-        "license": {
-            "name": "Apache 2.0",
-            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-        }
+  "openapi": "3.0.0",
+  "info": {
+    "description": "Find the best restro near you.",
+    "version": "1.0.0",
+    "title": "Restro Finder",
+    "contact": {
+      "email": "obinnaeye@gmail.com"
     },
-    "servers" : [ {
-        "url" : "http://localhost:8181/api",
-        "description" : "example"
-    } ],
-    "schemes": ["http", "https"],
-    "components": {        
-        "securitySchemes": {
-            "authorization": {
-                "type": "http",
-                "scheme": "bearer",
-                "bearerFormat": "JWT"
-            }
-        }, 
-        "schemas": {
-            "restrosResponse": {
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "type": "string"
-                    },
-                    "address": {
-                        "type": "string"
-                    },
-                    "latitude": {
-                        "type": "string"
-                    },
-                    "longitude": {
-                        "type": "string"
-                    },
-                    "restroId": {
-                        "type": "string"
-                    }
-                }
-            },
-            "createSessionResponse": {
-                "type": "object",
-                "properties": {
-                    "accessToken": {
-                         "type": "string"
-                    },
-                    "refreshToken": {
-                        "type": "string"
-                    }
-                }
-            },
-            "userInput": {
-                "type": "object",
-                "properties": {
-                    "email": {
-                         "type": "string"
-                    },
-                    "name": {
-                        "type": "string"
-                    },
-                    "password": {
-                        "type": "string"
-                    }
-                },
-                "required": ["email", "password", "name"]
-            },
-            "createSessionInput": {
-                "type": "object",
-                "properties": {
-                    "email": {
-                         "type": "string"
-                    },
-                    "password": {
-                        "type": "string"
-                    }
-                },
-                "required": ["email", "password"]
-            },
-            "createRestroInput": {
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "type": "string",
-                        "description": "Not less than 3 characters and must be unique from existing restros"
-                    },
-                    "address": {
-                        "type": "string",
-                        "description": "Not less than 15 characters"
-                    },
-                    "latitude": {
-                        "type": "string"
-                    },
-                    "longitude": {
-                        "type": "string"
-                    }
-                },
-                "required": ["name", "address", "latitude", "longitude"]
-            },
-            "updateRestroInput": {
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "type": "string"
-                    },
-                    "address": {
-                        "type": "string"
-                    },
-                    "latitude": {
-                        "type": "number"
-                    },
-                    "longitude": {
-                        "type": "number"
-                    }
-                }
-            },
-            "User": {
-                "type": "object",
-                "properties": {
-                    "_id": {
-                        "type": "string"
-                    },
-                    "email": {
-                        "type": "string"
-                    },
-                    "createdAt": {
-                        "type": "string"
-                    },
-                    "updatedAt": {
-                        "type": "string"
-                    }
-                }
-            },
-            "NotFoundResponse": {
-                "type": "object",
-                "properties": {
-                    "statusCode": {
-                        "type": "string"
-                    },
-                    "message": {
-                        "type": "string"
-                    }
-                }
-    
-            },
-            "InvalidStatusResponse": {
-                "type": "object",
-                "properties": {
-                    "statusCode": {
-                        "type": "string"
-                    },
-                    "message": {
-                        "type": "string"
-                    },
-                    "fields": {
-                        "type": "array"
-                    }
-                }
-    
-            }
-        }
-    },
-    "host": "localhost:8181",
-    "basePath": "/api",
-    "paths" : {
-        "/restros" : {
-            "get" : {
-                "summary" : "Get all the restros",
-                "description": "Get all the restros",
-                "produces": ["application/json"],
-                "parameters": [],
-                "responses": {
-                    "200": {
-                        "description": "successful operation",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/components/schemas/restrosResponse"
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Not found",
-                        "schema": {
-                            "$ref": "#/components/schemas/NotFoundResponse"
-                        }
-                    }
-                },
-                "security": [
-                  {
-                    "authorization": []
-                  }
-                ]
-            },
-            "post" : {
-                "summary" : "Create new restro",
-                "description": "Create new restro",
-                "produces": ["application/json"],
-                "consumes": ["application/json"],
-                "requestBody": {
-                  "content": {
-                    "application/x-www-form-urlencoded": {
-                      "schema": {
-                        "type": "object",
-                        "$ref": "#/components/schemas/createRestroInput"
-                      }
-                    }
-                  }
-                },
-                "responses": {
-                    "200": {
-                        "description": "successful operation",
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#/components/schemas/restrosResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid status value",
-                        "schema": {
-                            "$ref": "#/components/schemas/InvalidStatusResponse"
-                        }
-                    }
-                },
-                "security": [
-                  {
-                    "authorization": []
-                  }
-                ]
-            }
-        },
-        "/filteredrestros" : {
-            "get" : {
-                "summary" : "Filter restros",
-                "description": "Filter restros",
-                "produces": ["application/json"],
-                "parameters": [
-                    {
-                        "name": "city",
-                        "in": "query",
-                        "description": "restro city",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "latitude",
-                        "in": "query",
-                        "description": "User location latitude",
-                        "required": false,
-                        "type": "string"
-                    },
-                    {
-                        "name": "longitude",
-                        "in": "query",
-                        "description": "User location longitude",
-                        "required": false,
-                        "type": "number"
-                    },
-                    {
-                        "name": "distance",
-                        "in": "query",
-                        "description": "User location distance",
-                        "required": false,
-                        "type": "number"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "successful operation",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/components/schemas/restrosResponse"
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Not found",
-                        "schema": {
-                            "$ref": "#/components/schemas/NotFoundResponse"
-                        }
-                    }
-                },
-                "security": [
-                  {
-                    "authorization": []
-                  }
-                ]
-            }
-        },
-        "/users" : {
-            "post" : {
-                "summary" : "Create user account",
-                "description": "Create user account",
-                "produces": ["application/json"],
-                "consumes": ["application/json"],
-                "requestBody": {
-                  "content": {
-                    "application/x-www-form-urlencoded": {
-                      "schema": {
-                        "type": "object",
-                        "$ref": "#/components/schemas/userInput"
-                      }
-                    }
-                  }
-                },
-                "responses": {
-                    "200": {
-                        "description": "successful operation",
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#/components/schemas/restrosResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/sessions" : {
-            "post" : {
-                "summary" : "Create user session (login)",
-                "description": "Create user (login)",
-                "produces": ["application/json"],
-                "consumes": ["application/json"],
-                "requestBody": {
-                  "content": {
-                    "application/x-www-form-urlencoded": {
-                      "schema": {
-                        "type": "object",
-                        "$ref": "#/components/schemas/createSessionInput"
-                      }
-                    }
-                  }
-                },
-                "responses": {
-                    "200": {
-                        "description": "successful operation",
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#/components/schemas/restrosResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/restro/{restroId}" : {
-            "get" : {
-                "summary" : "Get a specific restro",
-                "description": "Get a specific restro",
-                "produces": ["application/json"],
-                "parameters": [
-                    {
-                        "name": "restroId",
-                        "in": "path",
-                        "description": "restro id",
-                        "required": true,
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "successful operation",
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#/components/schemas/restrosResponse"
-                        }
-                    },
-                    "404": {
-                        "description": "Not found",
-                        "schema": {
-                            "$ref": "#/components/schemas/NotFoundResponse"
-                        }
-                    }
-                },
-                "security": [
-                  {
-                    "authorization": []
-                  }
-                ]
-            },
-            "put" : {
-                "summary" : "Update restro",
-                "description": "Update restro",
-                "produces": ["application/json"],
-                "consumes": ["application/json"],
-                "parameters": [
-                    {
-                        "name": "restroId",
-                        "in": "path",
-                        "description": "restro id",
-                        "required": true,
-                        "type": "string"
-                    }
-                ],
-                "requestBody": {
-                  "content": {
-                    "application/x-www-form-urlencoded": {
-                      "schema": {
-                        "type": "object",
-                        "$ref": "#/components/schemas/updateRestroInput"
-                      }
-                    }
-                  }
-                },
-                "responses": {
-                    "200": {
-                        "description": "successful operation",
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#/components/schemas/restrosResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid status value",
-                        "schema": {
-                            "$ref": "#/components/schemas/InvalidStatusResponse"
-                        }
-                    }
-                },
-                "security": [
-                  {
-                    "authorization": []
-                  }
-                ]
-            },
-            "delete" : {
-                "summary" : "Delete restro",
-                "description": "Delete restro",
-                "produces": ["application/json"],
-                "parameters": [
-                    {
-                        "name": "restroId",
-                        "in": "path",
-                        "description": "restro id",
-                        "required": true,
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "successful operation",
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#/components/schemas/restrosResponse"
-                        }
-                    },
-                    "404": {
-                        "description": "Not found",
-                        "schema": {
-                            "$ref": "#/components/schemas/NotFoundResponse"
-                        }
-                    }
-                },
-                "security": [
-                  {
-                    "authorization": []
-                  }
-                ]
-            }
-        }
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8181/api/v1.0",
+      "description": "example"
+    }
+  ],
+  "schemes": ["http", "https"],
+  "components": {
+    "securitySchemes": {
+      "authorization": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "restrosResponse": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "latitude": {
+            "type": "string"
+          },
+          "longitude": {
+            "type": "string"
+          },
+          "restroId": {
+            "type": "string"
+          }
+        }
+      },
+      "createSessionResponse": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string"
+          },
+          "refreshToken": {
+            "type": "string"
+          }
+        }
+      },
+      "userInput": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "required": ["email", "password", "name"]
+      },
+      "createSessionInput": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "required": ["email", "password"]
+      },
+      "createRestroInput": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Not less than 3 characters and must be unique from existing restros"
+          },
+          "address": {
+            "type": "string",
+            "description": "Not less than 15 characters"
+          },
+          "latitude": {
+            "type": "string"
+          },
+          "longitude": {
+            "type": "string"
+          }
+        },
+        "required": ["name", "address", "latitude", "longitude"]
+      },
+      "updateRestroInput": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "latitude": {
+            "type": "number"
+          },
+          "longitude": {
+            "type": "number"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        }
+      },
+      "NotFoundResponse": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "InvalidStatusResponse": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "fields": {
+            "type": "array"
+          }
+        }
+      }
+    }
+  },
+  "host": "localhost:8181",
+  "basePath": "/api/v1.0",
+  "paths": {
+    "/restros": {
+      "get": {
+        "summary": "Get all the restros",
+        "description": "Get all the restros",
+        "produces": ["application/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/restrosResponse"
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/components/schemas/NotFoundResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "Create new restro",
+        "description": "Create new restro",
+        "produces": ["application/json"],
+        "consumes": ["application/json"],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "$ref": "#/components/schemas/createRestroInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "$ref": "#/components/schemas/restrosResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid status value",
+            "schema": {
+              "$ref": "#/components/schemas/InvalidStatusResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ]
+      }
+    },
+    "/filteredrestros": {
+      "get": {
+        "summary": "Filter restros",
+        "description": "Filter restros",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "city",
+            "in": "query",
+            "description": "restro city",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "latitude",
+            "in": "query",
+            "description": "User location latitude",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "longitude",
+            "in": "query",
+            "description": "User location longitude",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "distance",
+            "in": "query",
+            "description": "User location distance",
+            "required": false,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/restrosResponse"
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/components/schemas/NotFoundResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ]
+      }
+    },
+    "/users": {
+      "post": {
+        "summary": "Create user account",
+        "description": "Create user account",
+        "produces": ["application/json"],
+        "consumes": ["application/json"],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "$ref": "#/components/schemas/userInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "$ref": "#/components/schemas/restrosResponse"
+            }
+          }
+        }
+      }
+    },
+    "/sessions": {
+      "post": {
+        "summary": "Create user session (login)",
+        "description": "Create user (login)",
+        "produces": ["application/json"],
+        "consumes": ["application/json"],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "$ref": "#/components/schemas/createSessionInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "$ref": "#/components/schemas/restrosResponse"
+            }
+          }
+        }
+      }
+    },
+    "/restro/{restroId}": {
+      "get": {
+        "summary": "Get a specific restro",
+        "description": "Get a specific restro",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "restroId",
+            "in": "path",
+            "description": "restro id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "$ref": "#/components/schemas/restrosResponse"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/components/schemas/NotFoundResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ]
+      },
+      "put": {
+        "summary": "Update restro",
+        "description": "Update restro",
+        "produces": ["application/json"],
+        "consumes": ["application/json"],
+        "parameters": [
+          {
+            "name": "restroId",
+            "in": "path",
+            "description": "restro id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "$ref": "#/components/schemas/updateRestroInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "$ref": "#/components/schemas/restrosResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid status value",
+            "schema": {
+              "$ref": "#/components/schemas/InvalidStatusResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Delete restro",
+        "description": "Delete restro",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "restroId",
+            "in": "path",
+            "description": "restro id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "$ref": "#/components/schemas/restrosResponse"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/components/schemas/NotFoundResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ]
+      }
+    }
+  }
 }
