@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { get } from "lodash";
-import { findUser } from "../service/user.service";
 import {
   createRestro,
   findRestro,
