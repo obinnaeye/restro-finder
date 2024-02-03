@@ -189,6 +189,11 @@
     "@types/qs" "*"
     "@types/serve-static" "*"
 
+"@types/haversine@^1.1.8":
+  version "1.1.8"
+  resolved "https://registry.yarnpkg.com/@types/haversine/-/haversine-1.1.8.tgz#8a83a723a782f404e5323d4ea7798f642a50fdf4"
+  integrity sha512-t2loPC7vWBPGUlViZy0K5KeyHBL5FP7UPhdzQMI98ofy+D9/tv+2ciAB1eAhCSseMDMLqQvS4KNk8PSMC+TOHg==
+
 "@types/http-errors@*":
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/@types/http-errors/-/http-errors-2.0.4.tgz#7eb47726c391b7345a6ec35ad7f4de469cf5ba4f"
@@ -975,6 +980,11 @@ hasown@^2.0.0:
   integrity sha512-vUptKVTpIJhcczKBbgnS+RtcuYMB8+oNzPK2/Hp3hanz8JmpATdmmgLgSaadVREkDm+e2giHwY3ZRkyjSIDDFA==
   dependencies:
     function-bind "^1.1.2"
+
+haversine@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/haversine/-/haversine-1.1.1.tgz#05b65e0445aca8f217b0db56877e4d637d3fc8ae"
+  integrity sha512-KW4MS8+krLIeiw8bF5z532CptG0ZyGGFj0UbKMxx25lKnnJ1hMUbuzQl+PXQjNiDLnl1bOyz23U6hSK10r4guw==
 
 help-me@^5.0.0:
   version "5.0.0"
