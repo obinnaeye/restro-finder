@@ -2,6 +2,9 @@ const sockMerchant = (
   numberOfSocks: number,
   listOfColorCode: number[],
 ): number => {
+  if (numberOfSocks != listOfColorCode.length) {
+    return 0;
+  }
   const socksCountsByColor = listOfColorCode.reduce(
     (prev, curr) => {
       const key = `${curr}`;
